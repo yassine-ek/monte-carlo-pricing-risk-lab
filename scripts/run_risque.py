@@ -184,8 +184,11 @@ def main():
     portefeuille = rk.PORTEFEUILLE
     assert abs(sum(portefeuille.values()) - 1.0) < 1e-12
     w = np.array(list(portefeuille.values()))
-    dossier = rk.trouver_dossier_donnees()
-    R = rk.rendements_log(portefeuille, dossier)
+    try:
+        dossier = rk.trouver_dossier_donnees()
+        R = rk.rendements_log(portefeuille, dossier)
+    except FileNotFoundError as e:   # données non redistribuées : message d'une ligne plutôt qu'une trace
+        sys.exit(f"Donnees de marche absentes. {e}")
     print(f"Donnees : {dossier.name} | {len(R)} rendements quotidiens {R.index[0].date()} -> {R.index[-1].date()}")
     print("Portefeuille :", {a: f"{100 * p:.0f} %" for a, p in portefeuille.items()}, "| notionnel", rk.NOTIONNEL)
 

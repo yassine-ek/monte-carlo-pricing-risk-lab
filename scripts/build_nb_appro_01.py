@@ -2,7 +2,7 @@
 
 Chaque chapitre suit le même fil : Question -> Intuition -> Théorème -> Attente -> Expérience -> Résultat -> Conclusion.
 Les cellules « Expérience » appellent mclab.experiences (le MÊME code que scripts/run_approfondissement.py, mêmes graines,
-mêmes nombres que results/approfondissement.json) ; les cellules « Résultat » impriment les phrases chiffrées du README ;
+mêmes nombres que results/approfondissement.json) ; les cellules « Résultat » impriment les phrases chiffrées de docs/approfondissement.md ;
 la cellule « Conclusion » vérifie par `assert` que les affirmations écrites dans le texte sont bien celles des nombres mesurés.
 
 Usage : python scripts/build_nb_appro_01.py
@@ -67,7 +67,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 import figures_appro as fa                  # une figure par question (même code que les PNG du dépôt)
-import run_approfondissement as ra          # phrases chiffrées du README (source unique)
+import run_approfondissement as ra          # phrases chiffrées de docs/approfondissement.md (source unique)
 from mclab import experiences
 
 plt.rcParams["figure.dpi"] = 90
@@ -404,7 +404,7 @@ md(r"""
 | Q7 | puissance de Kupiec / Christoffersen, théorème d'Euler | puissance faible (plus de 4 ans pour 80 %) ; contributions $=$ ES |
 | Q8 | Feller, fraction tronquée en $\Delta t^F$ | tendance confirmée, pente sous $F$ (régime non asymptotique) |
 
-Les nombres exacts, régénérés par `python scripts/run_approfondissement.py`, sont dans `results/approfondissement.json` et dans la section « Approfondissement » du `README.md`.
+Les nombres exacts, régénérés par `python scripts/run_approfondissement.py`, sont dans `results/approfondissement.json` et dans `docs/approfondissement.md`.
 """)
 
 nb = nbf.v4.new_notebook()

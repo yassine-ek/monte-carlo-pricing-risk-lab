@@ -26,6 +26,7 @@ Les tests qui exigent les données de marché sont ignorés (`skipif`) quand la 
 | `test_approfondissement_importance.py` | Q5 : second moment, dérive optimale, entropie croisée, grandes déviations |
 | `test_approfondissement_aad.py` | Q6 : AAD contre pathwise, analytique et bump |
 | `test_approfondissement_risque.py` | Q7 : puissance de Kupiec et Christoffersen, contributions d'Euler à l'ES |
-| `test_approfondissement_json.py` | `results/approfondissement.json` complet et cohérent avec le README |
-| `test_readme_tete.py` | tête du README : sections imposées dans l'ordre, tableaux remplis, nombres égaux à ceux de `results/*.json` |
+| `test_approfondissement_json.py` | `results/approfondissement.json` complet et cohérent avec `docs/approfondissement.md` et le résumé du README |
+| `test_readme_tete.py` | README : sections imposées dans l'ordre, premier écran, 400 lignes au plus, tableaux égaux à `results/*.json`, figure héro à deux panneaux et police lisible |
+| `test_hygiene_depot.py` | aucune trace interne ni chemin de machine (le `.venv` est ignoré), liens relatifs des docs résolus, `.gitattributes`, erreur guidée quand les données de marché manquent |
 | `test_dossiers_documentes.py` | chaque dossier du projet a un README qui cite tous ses fichiers |

@@ -87,7 +87,8 @@ def trouver_dossier_donnees() -> Path:
     for c in candidats:
         if (c / "EURUSD_1h.csv").is_file():
             return c
-    raise FileNotFoundError("Aucun dossier de donnees 1h trouve (definir UNIVERS_DIR).")
+    raise FileNotFoundError("Aucun dossier de donnees 1h trouve : definir la variable UNIVERS_DIR (dossier des <ACTIF>_1h.csv, colonnes "
+                            "datetime,close ; voir « Obtenir les donnees » dans le README, source : https://www.histdata.com).")
 
 
 def cloture_quotidienne(actif: str, dossier: Path | None = None, min_barres: int = 12,
@@ -102,8 +103,11 @@ def cloture_quotidienne(actif: str, dossier: Path | None = None, min_barres: int
     if actif in ACTIFS_MORTS:
         raise ValueError(f"{actif} est un actif mort : exclu de l'etude.")
     dossier = Path(dossier) if dossier is not None else trouver_dossier_donnees()
-    df = pd.read_csv(dossier / f"{actif}_1h.csv", usecols=["datetime", "close"],
-                     parse_dates=["datetime"])
+    fichier = dossier / f"{actif}_1h.csv"
+    if not fichier.is_file():
+        raise FileNotFoundError(f"{fichier} introuvable : le dossier UNIVERS_DIR doit contenir {actif}_1h.csv "
+                                "(voir « Obtenir les donnees » dans le README).")
+    df = pd.read_csv(fichier, usecols=["datetime", "close"], parse_dates=["datetime"])
     s = df.set_index("datetime")["close"].astype(float)
     s = s[s > 0].sort_index()
     jour = (s.index + pd.Timedelta(hours=decalage_h)).normalize()

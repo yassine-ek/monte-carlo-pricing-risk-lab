@@ -69,7 +69,7 @@ def test_marge_copule_interpolee_proche_exacte():
     nu = 6.0
     exact = special.stdtrit(nu, special.stdtr(4.0, x)) * np.sqrt((nu - 2) / nu)
     ok = np.abs(x) < 100
-    assert np.abs(rk.transformee_marge(x, 4.0, nu)[ok] - exact[ok]).max() < 1e-4   # mesuré : 4,6e-5 (revue : 1e-3 était 20x trop lâche)
+    assert np.abs(rk.transformee_marge(x, 4.0, nu)[ok] - exact[ok]).max() < 1e-4   # mesuré : 4,6e-5 (1e-3 était 20x trop lâche)
 
 
 def test_stats_echantillon_normale():

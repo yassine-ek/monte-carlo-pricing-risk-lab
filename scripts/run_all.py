@@ -1,4 +1,4 @@
-"""Relance toute la validation : results/validation.json, figures/*.png, tableau du README.
+"""Relance toute la validation : results/validation.json, figures/*.png, tableaux de docs/validation.md.
 
 Usage : python scripts/run_all.py            (environ 2 minutes)
 Toutes les graines sont fixées : deux exécutions donnent les mêmes estimations (hors temps de calcul).
@@ -286,7 +286,7 @@ def formater(x, chiffres=4):
 
 
 def tableaux_markdown(cas, couverture, encadrements, convergence, benchmark, efficacite, donnees_mlmc, etude_biais):
-    """Tableaux du README : lus dans les résultats, jamais saisis à la main."""
+    """Tableaux de docs/validation.md : lus dans les résultats, jamais saisis à la main."""
     def verdict(c):
         if c["attendu_echec"]:
             return "échec attendu (démo)"
@@ -339,8 +339,8 @@ def tableaux_markdown(cas, couverture, encadrements, convergence, benchmark, eff
             "benchmark": bench, "efficacite": eff, "mlmc": ml, "barriere": bar}
 
 
-def mettre_a_jour_readme(tables):
-    chemin = RACINE / "README.md"
+def mettre_a_jour_validation(tables):
+    chemin = RACINE / "docs" / "validation.md"
     if not chemin.exists():
         return
     texte = chemin.read_text(encoding="utf-8")
@@ -406,7 +406,7 @@ def main():
     (RESULTATS / "validation.json").write_text(json.dumps(en_json(sortie), indent=2, ensure_ascii=False), encoding="utf-8")
     tables = tableaux_markdown(CAS, couverture, encadrements, convergence, benchmark, lignes_efficacite, donnees_mlmc, etude_biais)
     (RESULTATS / "tableau_validation.md").write_text("\n\n".join(f"## {k}\n\n{v}" for k, v in tables.items()), encoding="utf-8")
-    mettre_a_jour_readme(tables)
+    mettre_a_jour_validation(tables)
     n_ok = sum(c["verdict_ok"] or c["attendu_echec"] for c in CAS)
     print(f"{n_ok}/{len(CAS)} cas conformes (|z|<3 ou échec attendu) ; durée {time.perf_counter() - t_debut:.0f} s")
 

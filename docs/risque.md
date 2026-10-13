@@ -17,6 +17,18 @@ fixés *avant* les calculs) mais à savoir **laquelle est défendable** devant u
 Niveaux : VaR à 99 % (backtest réglementaire) et ES à 97,5 % (mesure de capital FRTB, qui
 remplace la VaR 99 %). Convention : on raisonne sur la **perte** `L = −P&L`, positive quand on perd.
 
+**Pourquoi un Monte Carlo sur un portefeuille linéaire ?** Les 7 positions sont longues et linéaires
+(delta-1) : la réévaluation complète `L = −N Σ wᵢ (exp(rᵢ) − 1)` est une fonction simple des rendements,
+donc le Monte Carlo ne sert pas ici à repricer des options. Il sert à simuler la **loi jointe, non
+gaussienne,** des 7 rendements (queues épaisses, asymétrie de baisse, dépendance de queue) : Student
+multivarié, bootstrap conjoint de lignes entières (FHS), copule t + marges GARCH. Le quantile de la
+perte sous ces lois n'a pas de formule fermée ; la VaR paramétrique normale (méthode b) n'en est que le
+cas gaussien, et c'est l'une des plus rejetées. Que la FHS l'emporte est un résultat attendu pour ce type
+de portefeuille : l'apport du volet est la procédure de backtest (cinq modèles, quatre tests, puissance
+discutée en limites), pas une découverte de modèle. Ce que le volet ne montre pas : une réévaluation
+complète où delta-gamma et réévaluation divergent, c'est-à-dire un portefeuille d'options (extension non
+faite).
+
 ## 2. Portefeuille et données
 
 Poids déclarés **avant tout calcul**, notionnel 10 M€, 7 lignes **toutes longues**, rebalancées
@@ -87,7 +99,7 @@ La transformation `F⁻¹_{t,νᵢ}(F_{t,ν_c}(x))` est interpolée sur une gril
 * GARCH : paramètres estimés sur le passé à la date de refit, puis **figés 20 jours** ; la variance
   du jour t est obtenue par le filtre sur la fenêtre passée (amorce = moyenne des 50 premiers r² de
   la fenêtre). En cas d'échec d'ajustement, on reprend les paramètres précédents (0 échec dans
-  ce run ; 110 des 1 232 ajustements (8,9 %) tombent sur la frontière α+β = 1 à 10⁻⁶ près, dont 82 avec α+β ≥ 1 exactement : IGARCH, accepté ; compte refait par `projets_cv/_revue/scripts_01_05/rev01_igarch_compte.py`).
+  ce run ; 110 des 1 232 ajustements (8,9 %) tombent sur la frontière α+β = 1 à 10⁻⁶ près, dont 82 avec α+β ≥ 1 exactement : IGARCH, accepté ; compte refait indépendamment).
 * Monte Carlo : graine propre à chaque jour (`default_rng([20260101, t])`), partagée par les
   méthodes (c), (d), (e) → reproductible et comparaison à bruit commun. Les 5 méthodes sont évaluées
   **tous les jours** (pas de sous-échantillonnage : 140 s au total).

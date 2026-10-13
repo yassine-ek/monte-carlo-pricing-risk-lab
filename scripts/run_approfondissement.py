@@ -1,7 +1,8 @@
-"""Relance tout l'approfondissement : results/approfondissement.json + figures/appro_*.png + section du README.
+"""Relance tout l'approfondissement : results/approfondissement.json + figures/appro_*.png + docs/approfondissement.md
+(détail complet) + résumé de 8 lignes injecté dans le README.
 
 Usage : python scripts/run_approfondissement.py [--only Q1,Q4] [--sans-readme]     (environ 7 minutes pour tout)
-        python scripts/run_approfondissement.py --readme-seul                       (réécrit la section du README depuis le JSON, sans calcul)
+        python scripts/run_approfondissement.py --readme-seul                       (réécrit docs/approfondissement.md et le résumé du README depuis le JSON, sans calcul)
 Toutes les graines sont fixées : deux exécutions donnent les mêmes nombres (hors temps de calcul et chronométrages de Q6).
 Le JSON contient un bloc par question : question, théorème, ce qu'on attend, chiffres, conclusion, durée.
 """
@@ -23,6 +24,7 @@ import figures_appro as fa  # noqa: E402
 from mclab import experiences  # noqa: E402
 
 RESULTATS, FIGURES = RACINE / "results" / "approfondissement.json", RACINE / "figures"
+DOC = RACINE / "docs" / "approfondissement.md"
 MARQUEUR_DEBUT, MARQUEUR_FIN = "<!-- AUTO:approfondissement:DEBUT -->", "<!-- AUTO:approfondissement:FIN -->"
 
 
@@ -95,7 +97,7 @@ def lignes_readme(cle, b):
         p, q = k["points"], cr["points"]
         ecart = max(abs(v["variance_empirique"] / v["variance_theorique"] - 1) for cas in (p, q) for lib, v in cas.items() if lib != "naif")
         return [
-            f"Call K = 180 : le second moment M(mu) est convexe ; mu* = {f(p['mu_star']['mu'], 3)} (variance divisée par {f(p['mu_star']['facteur_variance'], 0)}), contre mu = z_K = {f(p['strike']['mu'], 3)} (x{f(p['strike']['facteur_variance'], 0)}, choix de v1) "
+            f"Call K = 180 : le second moment M(mu) est convexe ; mu* = {f(p['mu_star']['mu'], 3)} (variance divisée par {f(p['mu_star']['facteur_variance'], 0)}), contre mu = z_K = {f(p['strike']['mu'], 3)} (x{f(p['strike']['facteur_variance'], 0)}, dérive centrée sur le strike) "
             f"et mu_CE = {f(p['mu_ce']['mu'], 3)} (x{f(p['mu_ce']['facteur_variance'], 0)}). L'entropie croisée par 8 itérations de 20 000 tirages donne mu = {f(np.mean(k['ce_mu_final']), 3)} ± {f(np.std(k['ce_mu_final'], ddof=1), 3)} (10 graines).",
             f"Défaut rare (au moins {c['k_defauts']} défauts sur 100, P = {cr['valeur_exacte']:.2e}) : mu* = {f(q['mu_star']['mu'], 3)}, mu_CE = {f(q['mu_ce']['mu'], 3)}, variance divisée par {f(q['mu_star']['facteur_variance'], 0)} (CE : {f(q['mu_ce']['facteur_variance'], 0)}).",
             f"La variance empirique (n = {c['n_empirique']}) retrouve M(mu) - I^2 à {f(100 * ecart, 1)} % près sur les dérives d'importance.",
@@ -153,39 +155,102 @@ LECTURE_FIGURE = {
 }
 
 
-def section_readme(blocs):
-    """Texte markdown de la section « ## Approfondissement » (titres de questions + lignes lues dans le JSON)."""
-    sortie = ["## Approfondissement", "",
+ALT_FIGURE = {
+    "Q1": "Q1 : pentes log-log des erreurs forte et faible d'Euler et de Milstein sur GBM, CIR et Heston",
+    "Q2": "Q2 : variance et espérance par niveau, coût fois epsilon carré, bêta de Heston selon Feller",
+    "Q3": "Q3 : variance expliquée par les premières coordonnées et RMSE du QMC pour trois constructions du brownien",
+    "Q4": "Q4 : facteurs de variance mesurés et théoriques de la stratification et de l'hypercube latin",
+    "Q5": "Q5 : variance par tirage en fonction de la dérive d'importance, avec optimum et entropie croisée",
+    "Q6": "Q6 : coût des grecques par AAD contre bump-and-revalue, et écart aux références indépendantes",
+    "Q7": "Q7 : puissance des tests de Kupiec et de Christoffersen, et contributions d'Euler à l'ES",
+    "Q8": "Q8 : fraction de pas tronqués selon le ratio de Feller et pente log-log correspondante",
+}
+
+
+def resume_court(cle, b):
+    """Une ligne par question pour le README, avec un chiffre-clé lu dans le JSON (jamais saisi à la main)."""
+    c = b["chiffres"]
+    if cle == "Q1":
+        g, ci = c["gbm"], c["cir"]
+        return (f"**Q1 Euler et Milstein** : ordre fort mesuré en L1 {f(g['euler']['fort_l1']['pente'], 2)} (Euler) contre {f(g['milstein']['fort_l1']['pente'], 2)} (Milstein), "
+                f"ordre faible 1 pour les deux ; Feller violé dégrade le CIR (Euler {f(ci['feller_viole']['euler']['pente'])}, Milstein {f(ci['feller_viole']['milstein']['pente'])}).")
+    if cle == "Q2":
+        g = c["gbm"]
+        return (f"**Q2 MLMC et Milstein** : variance par niveau en 2^(-{f(g['milstein']['beta'])} l) avec Milstein contre 2^(-{f(g['euler']['beta'])} l) avec Euler ; "
+                f"coût en eps^-{f(g['milstein']['cout']['pente_cout'])} contre eps^-{f(g['euler']['cout']['pente_cout'])} ; Milstein x{f(c['gain_cout_milstein_sur_euler'][-1], 1)} moins cher à eps = {f(g['euler']['cout']['epsilons'][-1], 3)}.")
+    if cle == "Q3":
+        b16 = c["blocs"]["16"]
+
+        def s(k):
+            return 100 * b16[k]["indice"][b16[k]["ks"].index(1)]
+
+        return (f"**Q3 Pont brownien et ACP** : la 1re coordonnée porte {f(s('incrementale'), 0)} % / {f(s('pont'), 0)} % / {f(s('acp'), 0)} % de la variance "
+                f"(incréments / pont / ACP) ; RMSE du QMC divisée par {f(b16['pont']['rmse']['rmse'][-1] / b16['acp']['rmse']['rmse'][-1], 1)} entre pont et ACP (d = 16).")
+    if cle == "Q4":
+        e1 = c["strates"]["europeen_K100"]["64"]
+        lh = c["lhs"]["asiatique_16_pont"]
+        return (f"**Q4 Stratification et hypercube latin** : variance divisée par {f(e1['mesure']['facteur_prop'], 0)} mesuré contre {f(e1['theorie']['facteur_prop'], 0)} prédit (H = 64, européen ATM) ; "
+                f"Neyman x{f(e1['mesure']['facteur_neyman_oracle'], 0)} ; LHS x{f(lh['n']['4096']['gain_mesure'], 1)} sur l'asiatique (pont).")
+    if cle == "Q5":
+        p = c["cas"]["call_K180"]["points"]
+        return (f"**Q5 Importance sampling** : dérive optimale mu* = {f(p['mu_star']['mu'], 2)} (variance divisée par {f(p['mu_star']['facteur_variance'], 0)}) ; "
+                f"l'entropie croisée la retrouve (mu = {f(p['mu_ce']['mu'], 2)}, x{f(p['mu_ce']['facteur_variance'], 0)}).")
+    if cle == "Q6":
+        d = c["cout"][-1]
+        pire = max(max(v["max_abs_aad_vs_pathwise"].values()) for v in c["exactitude"].values())
+        return (f"**Q6 Grecques par AAD** : {d['m_grecques']} grecques pour {f(d['aad_boucle'], 1)}x le coût du prix contre {f(d['bump_seaux'], 0)}x en bump-and-revalue ; "
+                f"exactes à {pire:.0e} près contre le pathwise.")
+    if cle == "Q7":
+        k = c["kupiec"]
+        return (f"**Q7 Puissance des backtests** : un modèle à 2 % d'exceptions n'est détecté que {f(100 * k['points']['250']['puissance_exacte'], 0)} % du temps après 1 an "
+                f"(80 % après {k['T_80']} jours) ; les contributions d'Euler à l'ES somment à l'ES.")
+    if cle == "Q8":
+        bl = c["blocs"]
+        return (f"**Q8 Condition de Feller** : à 16 pas, {f(100 * bl['0.5']['fraction_tronquee'][1], 0)} % des pas sont tronqués pour F = 0,5 (cas du projet) "
+                f"contre {f(100 * bl['4.0']['fraction_tronquee'][1], 3)} % pour F = 4.")
+    raise KeyError(cle)
+
+
+def document_approfondissement(blocs):
+    """Texte de docs/approfondissement.md : une section par question (théorème, lignes lues dans le JSON, figure)."""
+    sortie = ["# Approfondissement : huit questions, huit théorèmes confrontés à la mesure", "",
               "Huit questions précises, chacune avec un théorème énoncé, une expérience qui le vérifie ou le met en défaut et une conclusion chiffrée. "
               "Tout est lu dans `results/approfondissement.json` (régénéré par `scripts/run_approfondissement.py`, graines fixées) ; "
-              "le détail pas à pas est dans `notebooks/approfondissement.ipynb`. Les chronométrages de Q6 et les durées dépendent de la machine.", ""]
+              "le détail pas à pas est dans [le notebook](../notebooks/approfondissement.ipynb). Les chronométrages de Q6 et les durées dépendent de la machine. "
+              "Ce fichier est généré : ne pas l'éditer à la main. Retour au [README](../README.md).", ""]
     for cle, b in blocs.items():
-        sortie.append(f"### {cle} {b['question']}")
+        sortie.append(f"## {cle} {b['question']}")
         sortie.append("")
         sortie.append(f"*Théorème* : {b['theoreme']}")
         sortie.append("")
         sortie += [f"- {ligne}" for ligne in lignes_readme(cle, b)]
         sortie.append("")
-        sortie.append(f"![{cle}](figures/{fa.FIGURES[cle][1]})")
+        sortie.append(f"![{ALT_FIGURE[cle]}](../figures/{fa.FIGURES[cle][1]})")
         sortie.append("")
         sortie.append(f"**Comment lire ce graphique.** {LECTURE_FIGURE[cle]}")
         sortie.append("")
     return "\n".join(sortie)
 
 
-def injecter_readme(texte):
+def section_readme(blocs):
+    """Résumé de 8 lignes pour le README : une ligne par question, lien vers le détail."""
+    return "\n".join(["## Approfondissement", "",
+                      "Huit théorèmes (convergence d'Euler et de Milstein, MLMC, dimension effective du QMC, stratification, importance sampling, AAD, "
+                      "puissance des backtests, Feller) confrontés à la mesure, avec les cas où la théorie et les données divergent. "
+                      "Détail, formules et figures : [docs/approfondissement.md](docs/approfondissement.md) et [notebook](notebooks/approfondissement.ipynb).", ""]
+                     + [f"- {resume_court(cle, b)}" for cle, b in blocs.items()])
+
+
+def injecter_readme(blocs):
+    """Écrit docs/approfondissement.md en entier et réinjecte le résumé entre les marqueurs AUTO du README."""
+    DOC.write_text(document_approfondissement(blocs) + "\n", encoding="utf-8")
     p = RACINE / "README.md"
     md = p.read_text(encoding="utf-8")
-    bloc = f"{MARQUEUR_DEBUT}\n{texte}\n{MARQUEUR_FIN}"
-    if MARQUEUR_DEBUT in md:
-        avant, reste = md.split(MARQUEUR_DEBUT, 1)
-        _, apres = reste.split(MARQUEUR_FIN, 1)
-        md = avant + bloc + apres
-    else:  # première insertion : juste avant « ## Limites honnêtes »
-        ancre = "## Limites honnêtes"
-        assert ancre in md
-        md = md.replace(ancre, bloc + "\n\n" + ancre, 1)
-    p.write_text(md, encoding="utf-8")
+    bloc = f"{MARQUEUR_DEBUT}\n{section_readme(blocs)}\n{MARQUEUR_FIN}"
+    assert MARQUEUR_DEBUT in md and MARQUEUR_FIN in md, "marqueurs AUTO:approfondissement absents du README"
+    avant, reste = md.split(MARQUEUR_DEBUT, 1)
+    _, apres = reste.split(MARQUEUR_FIN, 1)
+    p.write_text(avant + bloc + apres, encoding="utf-8")
 
 
 def main():
@@ -195,8 +260,8 @@ def main():
     ap.add_argument("--readme-seul", action="store_true", help="réécrit la section du README depuis le JSON existant, sans calcul")
     args = ap.parse_args()
     if args.readme_seul:
-        injecter_readme(section_readme(json.loads(RESULTATS.read_text(encoding="utf-8"))["blocs"]))
-        print("README mis à jour (sans calcul)")
+        injecter_readme(json.loads(RESULTATS.read_text(encoding="utf-8"))["blocs"])
+        print("docs/approfondissement.md et résumé du README mis à jour (sans calcul)")
         return
     cles = [c.strip().upper() for c in args.only.split(",")]
     existant = json.loads(RESULTATS.read_text(encoding="utf-8")) if RESULTATS.exists() else {"blocs": {}}
@@ -214,8 +279,8 @@ def main():
                 "duree_derniere_execution_s": time.time() - t0}
         RESULTATS.write_text(json.dumps({"meta": meta, "blocs": blocs}, ensure_ascii=False, indent=1), encoding="utf-8")
     if not args.sans_readme and set(blocs) == set(experiences.BLOCS):
-        injecter_readme(section_readme(blocs))
-        print("README mis à jour")
+        injecter_readme(blocs)
+        print("docs/approfondissement.md et résumé du README mis à jour")
     print(f"terminé en {time.time() - t0:.0f} s")
 
 

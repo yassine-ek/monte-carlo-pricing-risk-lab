@@ -1,0 +1,5 @@
+# les notebooks sont générés par scripts/ : ne pas les compter comme langage du dépôt
+*.ipynb linguist-documentation
+# fins de ligne LF partout (README et JSON sont régénérés par les scripts)
+*.md text eol=lf
+*.json text eol=lf

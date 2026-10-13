@@ -34,7 +34,7 @@ def test_mlmc_heston_a_la_tolerance():
 
 
 def test_regle_d_arret_du_biais_suit_giles():
-    """Régression (revue 2026-10-13) : le facteur 2^(alpha (l-L)) était inversé -> sur-raffinement (L=8 au lieu de 4).
+    """Régression (relecture critique) : le facteur 2^(alpha (l-L)) était inversé -> sur-raffinement (L=8 au lieu de 4).
 
     Échantillonneur synthétique sans bruit : E[Y_l] = 2^-l exactement, donc le biais restant après le niveau L
     vaut 2^-L. Arrêt attendu au premier L avec 2^-L <= eps/sqrt(2) (eps = 0,1 : 2^-4 = 0,0625 <= 0,0707 < 2^-3).

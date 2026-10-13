@@ -169,7 +169,7 @@ def fig_q4(ch):
 def fig_q5(ch):
     fig, ax = plt.subplots(1, 3, figsize=(14, 4.4))
     couleurs = {"naif": C["mc"], "strike": "#E69F00", "mu_star": C["milstein"], "mu_ce": C["acp"]}
-    noms = {"naif": "naïf (mu=0)", "strike": "mu = z_K (v1)", "mu_star": "mu* (second moment)", "mu_ce": "mu_CE (entropie croisée)"}
+    noms = {"naif": "naïf (mu=0)", "strike": "mu = z_K (strike)", "mu_star": "mu* (second moment)", "mu_ce": "mu_CE (entropie croisée)"}
     for a, k in ((ax[0], "call_K180"), (ax[1], "credit")):
         c = ch["cas"][k]
         v0 = c["variance_naive_par_tirage"]

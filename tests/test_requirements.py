@@ -6,7 +6,7 @@ from pathlib import Path
 
 
 def test_requirements_couvre_les_imports_de_mclab():
-    """Régression (revue 2026-10-13) : `arch` (GARCH du volet risque) manquait, donc `pip install -r requirements.txt`
+    """Régression (relecture critique) : `arch` (GARCH du volet risque) manquait, donc `pip install -r requirements.txt`
     suivi de pytest échouait avec ImportError sur tests/test_risque.py."""
     racine = Path(__file__).resolve().parents[1]
     lignes = (racine / "requirements.txt").read_text(encoding="utf-8").splitlines()

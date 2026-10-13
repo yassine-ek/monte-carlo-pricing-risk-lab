@@ -1,6 +1,6 @@
-"""Durcissement (revue 2026-10-13) : chaque formule est comparée à une méthode DIFFÉRENTE et exacte (~1e-8).
+"""Durcissement (relecture critique) : chaque formule est comparée à une méthode DIFFÉRENTE et exacte (~1e-8).
 
-Constat de la revue : les tests historiques comparent surtout à du Monte Carlo (erreur-type ~1e-2) avec les paramètres
+Constat de la relecture : les tests historiques comparent surtout à du Monte Carlo (erreur-type ~1e-2) avec les paramètres
 par défaut (v0 = theta pour Heston). Des mutations comme v0 <-> theta (Heston), 0,5 -> 0,4 sur la convexité des sauts de
 Merton, 2 -> 1,8 dans le pont brownien, le ddl du test conditionnel de Christoffersen, ou l'évaluation de LSM sur les
 chemins d'apprentissage passaient toute la suite. Ici : Riccati (solve_ivp), COS, quadrature, covariance explicite.
