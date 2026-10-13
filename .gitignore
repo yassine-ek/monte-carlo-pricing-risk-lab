@@ -1,0 +1,10 @@
+__pycache__/
+.pytest_cache/
+.ipynb_checkpoints/
+*.pyc
+*.nbi
+*.nbc
+# données de marché : jamais dans le dépôt (voir UNIVERS_DIR dans le README)
+data/
+*.csv
+.env

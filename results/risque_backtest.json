@@ -1,0 +1,495 @@
+{
+  "meta": {
+    "portefeuille_poids": {
+      "EURUSD": 0.2,
+      "USDJPY": 0.15,
+      "GBPUSD": 0.15,
+      "XAUUSD": 0.15,
+      "BCOUSD": 0.1,
+      "SPXUSD": 0.15,
+      "NSXUSD": 0.1
+    },
+    "notionnel_eur": 10000000.0,
+    "actifs_morts_exclus": [
+      "WTIUSD",
+      "ETXEUR",
+      "XAUAUD",
+      "XAUCHF",
+      "XAUEUR",
+      "XAUGBP",
+      "UDXUSD",
+      "GRXEUR"
+    ],
+    "donnees": "data/processed/univers/<ACTIF>_1h.csv -> cloture quotidienne (derniere barre du jour de trading, 17h NY)",
+    "periode_rendements": [
+      "2010-11-16",
+      "2026-06-26"
+    ],
+    "n_rendements": 4011,
+    "periode_backtest": [
+      "2012-10-25",
+      "2026-06-26"
+    ],
+    "n_jours_backtest": 3511,
+    "fenetre_jours": 500,
+    "lambda_ewma": 0.94,
+    "n_simulations_mc": 10000,
+    "refit_garch_jours": 20,
+    "graine_base": 20260101,
+    "mc_evalue_tous_les_jours": true,
+    "garch_refits": 176,
+    "garch_ajustements_echoues_remplaces_par_precedents": 0,
+    "duree_calcul_s": 139.7,
+    "stress_fenetres": {
+      "covid_mars_2020": [
+        "2020-03-01",
+        "2020-03-31"
+      ],
+      "ukraine_mars_2022": [
+        "2022-03-01",
+        "2022-03-31"
+      ],
+      "annee_2022": [
+        "2022-01-01",
+        "2022-12-31"
+      ]
+    },
+    "perte_max_realisee_eur": 442485.2427773349,
+    "date_perte_max": "2020-03-09"
+  },
+  "methodes": {
+    "hs": {
+      "libelle": "Simulation historique",
+      "var99_moyenne_eur": 138280.93317251888,
+      "es975_moyenne_eur": 140469.24471469372,
+      "var99_moyenne_pct_notionnel": 1.3828093317251888,
+      "backtest_var": {
+        "n_obs": 3511,
+        "n_exceptions": 47,
+        "taux_exceptions": 0.01338649957277129,
+        "taux_attendu": 0.010000000000000009,
+        "kupiec_lr": 3.6769101411059637,
+        "kupiec_p": 0.05517100278348804,
+        "christoffersen": {
+          "n00": 3423,
+          "n01": 40,
+          "n10": 40,
+          "n11": 7,
+          "lr_ind": 22.833009487391394,
+          "p_ind": 1.7670452737431458e-06,
+          "lr_cc": 26.509919628497357,
+          "p_cc": 1.7516369377282558e-06
+        },
+        "bale": {
+          "n_fenetres": 3262,
+          "part_vert": 0.6897608828939301,
+          "part_orange": 0.24555487431023912,
+          "part_rouge": 0.06468424279583078,
+          "max_exceptions_250j": 11,
+          "pire_zone": "rouge",
+          "exceptions_derniere_fenetre": 3,
+          "zone_derniere_fenetre": "vert"
+        }
+      },
+      "backtest_es": {
+        "z2": 0.30866119572963013,
+        "p_value": 0.003999200159968006,
+        "z2_simule_sd": 0.11110888791760289,
+        "n_exceptions_975": 105,
+        "taux_exceptions_975": 0.029906009683850755,
+        "ratio_perte_sur_es_apres_var975": 1.0758890052974983
+      },
+      "stress": {
+        "covid_mars_2020": {
+          "n_jours": 21,
+          "n_exceptions_var99": 6,
+          "perte_max_realisee": 442485.2427773349,
+          "date_perte_max": "2020-03-09",
+          "var99_ce_jour": 124324.37539759585,
+          "es975_ce_jour": 118683.51032008322,
+          "perte_max_sur_var99": 3.559118968924991,
+          "perte_max_sur_es975": 3.7282790303722506,
+          "var99_moyenne": 139886.61632364438,
+          "es975_moyenne": 165963.14659140632,
+          "perte_moyenne_realisee": 40750.78846646374
+        },
+        "ukraine_mars_2022": {
+          "n_jours": 23,
+          "n_exceptions_var99": 0,
+          "perte_max_realisee": 96075.6594800457,
+          "date_perte_max": "2022-03-14",
+          "var99_ce_jour": 149362.022341503,
+          "es975_ce_jour": 154066.42804518304,
+          "perte_max_sur_var99": 0.643240215778394,
+          "perte_max_sur_es975": 0.6235989287157978,
+          "var99_moyenne": 147271.59678341594,
+          "es975_moyenne": 153033.5296236868,
+          "perte_moyenne_realisee": -12236.950388846628
+        },
+        "annee_2022": {
+          "n_jours": 258,
+          "n_exceptions_var99": 6,
+          "perte_max_realisee": 194202.6910644905,
+          "date_perte_max": "2022-05-18",
+          "var99_ce_jour": 143248.1543277662,
+          "es975_ce_jour": 142859.2435239203,
+          "perte_max_sur_var99": 1.35570815537445,
+          "perte_max_sur_es975": 1.3593988479434533,
+          "var99_moyenne": 165976.76101964005,
+          "es975_moyenne": 161674.9432957833,
+          "perte_moyenne_realisee": 1810.8703966507062
+        }
+      }
+    },
+    "normale": {
+      "libelle": "Normale EWMA",
+      "var99_moyenne_eur": 108302.23265836986,
+      "es975_moyenne_eur": 108835.51197809346,
+      "var99_moyenne_pct_notionnel": 1.0830223265836987,
+      "backtest_var": {
+        "n_obs": 3511,
+        "n_exceptions": 73,
+        "taux_exceptions": 0.02079179720877243,
+        "taux_attendu": 0.010000000000000009,
+        "kupiec_lr": 31.50266437852656,
+        "kupiec_p": 1.991667852582175e-08,
+        "christoffersen": {
+          "n00": 3369,
+          "n01": 68,
+          "n10": 68,
+          "n11": 5,
+          "lr_ind": 5.303799607327733,
+          "p_ind": 0.02127895782970202,
+          "lr_cc": 36.80646398585429,
+          "p_cc": 1.0176018697618349e-08
+        },
+        "bale": {
+          "n_fenetres": 3262,
+          "part_vert": 0.43960760269773147,
+          "part_orange": 0.5125689760882894,
+          "part_rouge": 0.04782342121397915,
+          "max_exceptions_250j": 11,
+          "pire_zone": "rouge",
+          "exceptions_derniere_fenetre": 5,
+          "zone_derniere_fenetre": "orange"
+        }
+      },
+      "backtest_es": {
+        "z2": 0.6665100763998408,
+        "p_value": 0.0001999600079984003,
+        "z2_simule_sd": 0.10711884700336952,
+        "n_exceptions_975": 126,
+        "taux_exceptions_975": 0.035887211620620904,
+        "ratio_perte_sur_es_apres_var975": 1.158338311425436
+      },
+      "stress": {
+        "covid_mars_2020": {
+          "n_jours": 21,
+          "n_exceptions_var99": 2,
+          "perte_max_realisee": 442485.2427773349,
+          "date_perte_max": "2020-03-09",
+          "var99_ce_jour": 177042.9825696222,
+          "es975_ce_jour": 177914.7407872425,
+          "perte_max_sur_var99": 2.4993096950528804,
+          "perte_max_sur_es975": 2.4870634148660917,
+          "var99_moyenne": 357877.094874246,
+          "es975_moyenne": 359639.2788017113,
+          "perte_moyenne_realisee": 40750.78846646374
+        },
+        "ukraine_mars_2022": {
+          "n_jours": 23,
+          "n_exceptions_var99": 0,
+          "perte_max_realisee": 96075.6594800457,
+          "date_perte_max": "2022-03-14",
+          "var99_ce_jour": 109505.74140494202,
+          "es975_ce_jour": 110044.94679202265,
+          "perte_max_sur_var99": 0.8773572805170723,
+          "perte_max_sur_es975": 0.8730583482549368,
+          "var99_moyenne": 121769.94047012604,
+          "es975_moyenne": 122369.5346744443,
+          "perte_moyenne_realisee": -12236.950388846628
+        },
+        "annee_2022": {
+          "n_jours": 258,
+          "n_exceptions_var99": 6,
+          "perte_max_realisee": 194202.6910644905,
+          "date_perte_max": "2022-05-18",
+          "var99_ce_jour": 181269.71398318055,
+          "es975_ce_jour": 182162.28459217594,
+          "perte_max_sur_var99": 1.0713465961694515,
+          "perte_max_sur_es975": 1.0660971424423589,
+          "var99_moyenne": 156464.33487976243,
+          "es975_moyenne": 157234.76400220612,
+          "perte_moyenne_realisee": 1810.8703966507062
+        }
+      }
+    },
+    "mc_t": {
+      "libelle": "MC Student-t",
+      "var99_moyenne_eur": 114771.06457071194,
+      "es975_moyenne_eur": 117564.63823043973,
+      "var99_moyenne_pct_notionnel": 1.1477106457071193,
+      "backtest_var": {
+        "n_obs": 3511,
+        "n_exceptions": 59,
+        "taux_exceptions": 0.016804329250925662,
+        "taux_attendu": 0.010000000000000009,
+        "kupiec_lr": 13.632646417023693,
+        "kupiec_p": 0.00022228633715490713,
+        "christoffersen": {
+          "n00": 3396,
+          "n01": 55,
+          "n10": 55,
+          "n11": 4,
+          "lr_ind": 5.460418535060398,
+          "p_ind": 0.01945198696795956,
+          "lr_cc": 19.09306495208409,
+          "p_cc": 7.144858369972412e-05
+        },
+        "bale": {
+          "n_fenetres": 3262,
+          "part_vert": 0.5904353157572042,
+          "part_orange": 0.4068056407112201,
+          "part_rouge": 0.0027590435315757206,
+          "max_exceptions_250j": 10,
+          "pire_zone": "rouge",
+          "exceptions_derniere_fenetre": 4,
+          "zone_derniere_fenetre": "vert"
+        }
+      },
+      "backtest_es": {
+        "z2": 0.5597293991601138,
+        "p_value": 0.0001999600079984003,
+        "z2_simule_sd": 0.10991645354288254,
+        "n_exceptions_975": 128,
+        "taux_exceptions_975": 0.0364568499003133,
+        "ratio_perte_sur_es_apres_var975": 1.072488207409625
+      },
+      "stress": {
+        "covid_mars_2020": {
+          "n_jours": 21,
+          "n_exceptions_var99": 2,
+          "perte_max_realisee": 442485.2427773349,
+          "date_perte_max": "2020-03-09",
+          "var99_ce_jour": 186377.12287036664,
+          "es975_ce_jour": 192858.46461646163,
+          "perte_max_sur_var99": 2.3741392503687404,
+          "perte_max_sur_es975": 2.294352201015947,
+          "var99_moyenne": 365968.7170694123,
+          "es975_moyenne": 374526.77645356127,
+          "perte_moyenne_realisee": 40750.78846646374
+        },
+        "ukraine_mars_2022": {
+          "n_jours": 23,
+          "n_exceptions_var99": 0,
+          "perte_max_realisee": 96075.6594800457,
+          "date_perte_max": "2022-03-14",
+          "var99_ce_jour": 114402.55886724086,
+          "es975_ce_jour": 117888.24979495235,
+          "perte_max_sur_var99": 0.8398034137639987,
+          "perte_max_sur_es975": 0.8149723118898945,
+          "var99_moyenne": 128239.91487363674,
+          "es975_moyenne": 131126.68015833778,
+          "perte_moyenne_realisee": -12236.950388846628
+        },
+        "annee_2022": {
+          "n_jours": 258,
+          "n_exceptions_var99": 4,
+          "perte_max_realisee": 194202.6910644905,
+          "date_perte_max": "2022-05-18",
+          "var99_ce_jour": 186543.3840375119,
+          "es975_ce_jour": 187760.75490952493,
+          "perte_max_sur_var99": 1.0410591191239373,
+          "perte_max_sur_es975": 1.034309279157243,
+          "var99_moyenne": 164826.38561789537,
+          "es975_moyenne": 168333.51566968483,
+          "perte_moyenne_realisee": 1810.8703966507062
+        }
+      }
+    },
+    "fhs": {
+      "libelle": "FHS (GARCH)",
+      "var99_moyenne_eur": 130556.16105876393,
+      "es975_moyenne_eur": 134577.01632560926,
+      "var99_moyenne_pct_notionnel": 1.3055616105876393,
+      "backtest_var": {
+        "n_obs": 3511,
+        "n_exceptions": 38,
+        "taux_exceptions": 0.01082312731415551,
+        "taux_attendu": 0.010000000000000009,
+        "kupiec_lr": 0.23401641832850828,
+        "kupiec_p": 0.6285615754279479,
+        "christoffersen": {
+          "n00": 3436,
+          "n01": 36,
+          "n10": 36,
+          "n11": 2,
+          "lr_ind": 3.2851221857946484,
+          "p_ind": 0.06991042461946809,
+          "lr_cc": 3.5191386041231567,
+          "p_cc": 0.17211897915072885
+        },
+        "bale": {
+          "n_fenetres": 3262,
+          "part_vert": 0.8007357449417535,
+          "part_orange": 0.17841814837522993,
+          "part_rouge": 0.020846106683016553,
+          "max_exceptions_250j": 11,
+          "pire_zone": "rouge",
+          "exceptions_derniere_fenetre": 3,
+          "zone_derniere_fenetre": "vert"
+        }
+      },
+      "backtest_es": {
+        "z2": 0.03172379365500477,
+        "p_value": 0.378124375124975,
+        "z2_simule_sd": 0.10832925123117391,
+        "n_exceptions_975": 88,
+        "taux_exceptions_975": 0.025064084306465395,
+        "ratio_perte_sur_es_apres_var975": 1.0291389985048873
+      },
+      "stress": {
+        "covid_mars_2020": {
+          "n_jours": 21,
+          "n_exceptions_var99": 2,
+          "perte_max_realisee": 442485.2427773349,
+          "date_perte_max": "2020-03-09",
+          "var99_ce_jour": 231719.96276382363,
+          "es975_ce_jour": 237269.5182025596,
+          "perte_max_sur_var99": 1.9095689361400854,
+          "perte_max_sur_es975": 1.8649055560503156,
+          "var99_moyenne": 419394.0659930433,
+          "es975_moyenne": 441932.33479695383,
+          "perte_moyenne_realisee": 40750.78846646374
+        },
+        "ukraine_mars_2022": {
+          "n_jours": 23,
+          "n_exceptions_var99": 0,
+          "perte_max_realisee": 96075.6594800457,
+          "date_perte_max": "2022-03-14",
+          "var99_ce_jour": 259649.278028418,
+          "es975_ce_jour": 256416.35935126236,
+          "perte_max_sur_var99": 0.3700208997674565,
+          "perte_max_sur_es975": 0.3746861538909557,
+          "var99_moyenne": 233967.30685565152,
+          "es975_moyenne": 237649.6509984773,
+          "perte_moyenne_realisee": -12236.950388846628
+        },
+        "annee_2022": {
+          "n_jours": 258,
+          "n_exceptions_var99": 2,
+          "perte_max_realisee": 194202.6910644905,
+          "date_perte_max": "2022-05-18",
+          "var99_ce_jour": 218077.29367000124,
+          "es975_ce_jour": 228643.9000826842,
+          "perte_max_sur_var99": 0.8905222904974314,
+          "perte_max_sur_es975": 0.8493674705262692,
+          "var99_moyenne": 186843.32868269226,
+          "es975_moyenne": 193439.45092335192,
+          "perte_moyenne_realisee": 1810.8703966507062
+        }
+      }
+    },
+    "copule_t": {
+      "libelle": "Copule t + GARCH",
+      "var99_moyenne_eur": 117039.34132866756,
+      "es975_moyenne_eur": 120067.00282487279,
+      "var99_moyenne_pct_notionnel": 1.1703934132866758,
+      "backtest_var": {
+        "n_obs": 3511,
+        "n_exceptions": 52,
+        "taux_exceptions": 0.01481059527200228,
+        "taux_attendu": 0.010000000000000009,
+        "kupiec_lr": 7.149008682355202,
+        "kupiec_p": 0.007500543350069472,
+        "christoffersen": {
+          "n00": 3409,
+          "n01": 49,
+          "n10": 49,
+          "n11": 3,
+          "lr_ind": 3.896132205119102,
+          "p_ind": 0.04839740756200833,
+          "lr_cc": 11.045140887474304,
+          "p_cc": 0.003995564357685378
+        },
+        "bale": {
+          "n_fenetres": 3262,
+          "part_vert": 0.6505211526670754,
+          "part_orange": 0.3038013488657266,
+          "part_rouge": 0.04567749846719804,
+          "max_exceptions_250j": 11,
+          "pire_zone": "rouge",
+          "exceptions_derniere_fenetre": 3,
+          "zone_derniere_fenetre": "vert"
+        }
+      },
+      "backtest_es": {
+        "z2": 0.25907871259058446,
+        "p_value": 0.010997800439912017,
+        "z2_simule_sd": 0.10827251355974493,
+        "n_exceptions_975": 102,
+        "taux_exceptions_975": 0.02905155226431216,
+        "ratio_perte_sur_es_apres_var975": 1.0919171603776023
+      },
+      "stress": {
+        "covid_mars_2020": {
+          "n_jours": 21,
+          "n_exceptions_var99": 2,
+          "perte_max_realisee": 442485.2427773349,
+          "date_perte_max": "2020-03-09",
+          "var99_ce_jour": 210282.663208349,
+          "es975_ce_jour": 223135.9010684552,
+          "perte_max_sur_var99": 2.104240245135751,
+          "perte_max_sur_es975": 1.9830302549188898,
+          "var99_moyenne": 349288.21390125185,
+          "es975_moyenne": 358508.72998644755,
+          "perte_moyenne_realisee": 40750.78846646374
+        },
+        "ukraine_mars_2022": {
+          "n_jours": 23,
+          "n_exceptions_var99": 0,
+          "perte_max_realisee": 96075.6594800457,
+          "date_perte_max": "2022-03-14",
+          "var99_ce_jour": 211111.0690697774,
+          "es975_ce_jour": 214930.48512043507,
+          "perte_max_sur_var99": 0.45509531974512585,
+          "perte_max_sur_es975": 0.4470080613562578,
+          "var99_moyenne": 188305.72437394853,
+          "es975_moyenne": 192362.47890957518,
+          "perte_moyenne_realisee": -12236.950388846628
+        },
+        "annee_2022": {
+          "n_jours": 258,
+          "n_exceptions_var99": 5,
+          "perte_max_realisee": 194202.6910644905,
+          "date_perte_max": "2022-05-18",
+          "var99_ce_jour": 176497.21612778428,
+          "es975_ce_jour": 181295.08740608484,
+          "perte_max_sur_var99": 1.1003158878375023,
+          "perte_max_sur_es975": 1.0711966542672708,
+          "var99_moyenne": 161402.2074629506,
+          "es975_moyenne": 164819.24692795964,
+          "perte_moyenne_realisee": 1810.8703966507062
+        }
+      }
+    }
+  },
+  "diagnostic_fhs_vs_copule": {
+    "n_dates": 22,
+    "pas_jours": 160,
+    "nu_copule_moyen": 11.545454545454545,
+    "asymetrie_fhs": -0.5210403668743315,
+    "asymetrie_copule": 0.06629256541635743,
+    "exces_kurtosis_fhs": 2.4264176037819256,
+    "exces_kurtosis_copule": 4.934206806979315,
+    "var99_copule_sur_fhs": 0.9219872648354883
+  },
+  "recoupement_exceptions_jours": {
+    "0_methodes_en_exception": 3420,
+    "1_methodes_en_exception": 21,
+    "2_methodes_en_exception": 21,
+    "3_methodes_en_exception": 13,
+    "4_methodes_en_exception": 13,
+    "5_methodes_en_exception": 23
+  }
+}
