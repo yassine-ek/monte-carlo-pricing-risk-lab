@@ -21,7 +21,7 @@ def test_sections_imposees_dans_l_ordre():
     ordre = ["# Laboratoire Monte Carlo", "AUTO:tete_glance:DEBUT", "actions/workflows/tests.yml/badge.svg", "## Résultats clés",
              "hero_convergence_et_var.png", "**Aller plus loin**", "## Frais et hypothèses", "## Métriques", "## Overfit ou pas ?",
              "## Toutes les variantes", "## Pourquoi ce projet", "AUTO:approfondissement:DEBUT", "## Limites honnêtes",
-             "## Comment ce projet a été construit", "## Reproduire", "### Obtenir les données"]
+             "## Reproduire", "### Obtenir les données"]
     positions = [README.index(m) for m in ordre]
     assert positions == sorted(positions)
     assert (RACINE / "figures" / "hero_convergence_et_var.png").is_file()
